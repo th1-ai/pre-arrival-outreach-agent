@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash({{PRE_ARRIVAL_TOOL}} *)",
+      "Bash({{PMS_LOOKUP_TOOL}} *)",
+      "Bash({{EMAIL_CLI}} {{INBOX_BOOKINGS}} messages-list *)",
+      "Bash({{EMAIL_CLI}} {{INBOX_RENTALS}} messages-list *)",
+      "Bash({{DRAFT_NEW_TOOL}} *)",
+      "Bash(date *)",
+      "Edit(/runs/**)"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push *)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Edit(/AUTONOMY.md)",
+      "Edit(/.claude/hooks/**)",
+      "Edit(/.claude/settings*.json)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.claude/hooks/autonomy-guard.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
